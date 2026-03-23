@@ -35,7 +35,7 @@ export default function Footer() {
             <a href="#" className="w-11 h-11 border border-white/10 rounded-lg flex items-center justify-center text-slate-400 hover:border-cyan hover:text-cyan hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] transition-all cursor-pointer group">
               <Linkedin className="w-5 h-5 group-hover:scale-110 transition-transform" />
             </a>
-            <a href="#" className="w-11 h-11 border border-white/10 rounded-lg flex items-center justify-center text-slate-400 hover:border-cyan hover:text-cyan hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] transition-all cursor-pointer group">
+            <a href="mailto:havacilikcomu2021@gmail.com" className="w-11 h-11 border border-white/10 rounded-lg flex items-center justify-center text-slate-400 hover:border-cyan hover:text-cyan hover:shadow-[0_0_20px_rgba(6,182,212,0.15)] transition-all cursor-pointer group">
               <Mail className="w-5 h-5 group-hover:scale-110 transition-transform" />
             </a>
           </div>

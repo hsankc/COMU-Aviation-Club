@@ -4,17 +4,19 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --host",
     "build": "vite build",
     "preview": "vite preview"
   },
   "dependencies": {
     "@react-three/drei": "^9.105.6",
     "@react-three/fiber": "^8.16.1",
+    "@supabase/supabase-js": "^2.99.3",
     "framer-motion": "^11.0.25",
     "lucide-react": "^0.372.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^7.13.1",
     "three": "^0.163.0"
   },
   "devDependencies": {
