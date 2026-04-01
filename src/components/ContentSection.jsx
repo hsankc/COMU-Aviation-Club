@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Target, Eye, Users, Award, Calendar, BookOpen, MapPin, 
-  ExternalLink, Clock, Monitor, Globe, Plane, Rocket, Hammer 
+  ExternalLink, Clock, Monitor, Globe, Plane, Rocket, Hammer, X, FileText 
 } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 
@@ -25,9 +25,21 @@ const yonetim = [
 ]
 
 const yaklasanEtkinlikler = [
-  { title: 'İHA0/1 TEORİK EĞİTİM', date: '28 Mart 2026', desc: 'İnsansız Hava Aracı pilotluğu için gerekli teorik bilgilerin verileceği kapsamlı eğitim.', tag: 'Eğitim', link: '#egitimler' },
-  { title: 'İHA0/1 PRATİK UÇUŞ EĞİTİMİ', date: '29 Mart 2026', desc: 'Teorik eğitimi tamamlayan adaylar için sahada gerçek uçuş deneyimi ve uygulama.', tag: 'Eğitim', link: '#egitimler' },
+  { title: 'FİLM GECESİ: SULLY', date: '17 Nisan 2026 - 20:00', desc: 'Ziraat Fakültesi Amfisinde "Sully" filmini izleyerek havacılık dolu bir gece geçireceğiz.', tag: 'Etkinlik', link: '#etkinlikler' },
+  { title: 'İHA0/1 TEORİK EĞİTİM', date: '18 Nisan 2026', desc: 'İnsansız Hava Aracı pilotluğu için gerekli teorik bilgilerin verileceği kapsamlı eğitim.', tag: 'Eğitim', link: '#egitimler' },
+  { title: 'İHA0/1 PRATİK UÇUŞ EĞİTİMİ', date: '19 Nisan 2026', desc: 'Teorik eğitimi tamamlayan adaylar için sahada gerçek uçuş deneyimi ve uygulama.', tag: 'Eğitim', link: '#egitimler' },
+  { title: '23 NİSAN STANDI', date: '23 Nisan 2026', desc: 'Çanakkale Hamidiye Tabyalarında stant açarak havacılık faaliyetlerimizi tanıtacağız.', tag: 'Stant', link: '#etkinlikler' },
+  { title: 'TÜRK YILDIZLARI SÖYLEŞİSİ', date: 'Nisan Sonu (Planlanıyor)', desc: 'Türk Yıldızları ekibiyle İçdaş Kongre Merkezi\'nde düzenlemeyi planladığımız söyleşi ve imza günü.', tag: 'Söyleşi', link: '#etkinlikler', isPending: true },
+  { title: 'HAVA RADAR MEVZİ GEZİSİ', date: '30 Nisan 2026', desc: 'Çanakkale Hava Radar Mevzi Komutanlığı\'na düzenleyeceğimiz teknik ve bilgilendirici gezi. Katılımcı kontenjanı dolmuştur.', tag: 'Gezi', link: '#etkinlikler', hasParticipants: true },
 ]
+
+const radarKatilimcilar = [
+  "Prof. Dr. Cafer TÜRKMEN (Danışman)", "1. Hasan KAŞIKCI", "2. Ezgi TURAN", "3. Nazire ÇETİNER", "4. Edanur TOPÇU", "5. Ayşenur KARATAŞ", "6. Sinan PEHLİVAN", "7. Lachyn ACHILOVA", "8. Kerem ŞAYİR", "9. Sudenur SORUÇ", "10. Esranur KASALAK", "11. Furkan TUNCAL", "12. Enes DOK", "13. Ayşe AVCI", "14. Sevim Zehra ATAKAV", "15. Rabia DÖNMEZ", "16. Feyzullah AS", "17. Kadir Efe ATİK", "18. Ronay TOKDEMİR", "19. Bensu ŞAHİN", "20. Sudenaz ÖZŞEN", "21. Asya BİLGEN", "22. Hatice Meryem YILDIRIM", "23. Tuğba SOYTÜRK", "24. Mehmet Ebrar DUMAN", "25. Bora Baturalp ERCİ", "26. Yaren BAYRAM", "27. Hatice Gülin KÜÇÜKKAYA", "28. Zeynep Itır YAKŞİ", "29. Eren SARI", "30. Furkan AKÇAY", "31. Beyza ASLAN", "32. Hümeyra LİMAN"
+];
+
+const radarEkKatilimcilar = [
+  "33. İlkan SEVDİM", "34. Elif KARA", "35. Zeynep Meryem ÇANDIR", "36. Sinem Nur ARMUTÇU", "37. Sudenur KAVAS", "38. Doğa Nur ŞAHPOLAT", "39. Aziz Can KAHRAMAN", "40. İsmail YILDIZ", "41. Sıla AKDENİZ", "42. Sude Nur KUZU", "43. Mustafa GENCER"
+];
 
 const egitimler = [
   { icon: Monitor, title: 'Simülasyon Merkezi', desc: 'Profesyonel simülatörler ile uçuş eğitimi. Randevu alarak merkezimizi ziyaret edebilirsiniz.', link: 'https://rezervasyon.comu.edu.tr/Simulasyon/', btnText: 'Randevu Al' },
@@ -101,6 +113,7 @@ export default function ContentSection() {
   const [events, setEvents] = useState(yaklasanEtkinlikler)
   const [gallery, setGallery] = useState(galeriItems)
   const [expandedEgitim, setExpandedEgitim] = useState(null)
+  const [showKatilimcilar, setShowKatilimcilar] = useState(false)
   const [misyon, setMisyon] = useState('Askeri, sivil, sportif ve uzay havacılığı alanlarında farkındalık oluşturmak amacıyla söyleşiler, atölye çalışmaları, kariyer günleri ve staj buluşmaları düzenliyoruz. Üyelerimize sektördeki güncel gelişmeleri aktarıyor, staj ve iş fırsatlarını duyurarak sektöre nitelikli bireyler kazandırmayı hedefliyoruz. Uzmanlarla işbirliği yaparak fuarlar, yarışmalar ve sosyal sorumluluk projeleri gerçekleştiriyoruz. Tüm bu faaliyetlerle ÇOMÜ\'yü havacılık alanında en iyi şekilde temsil etmeyi amaçlıyoruz.')
   const [vizyon, setVizyon] = useState('Çanakkale Onsekiz Mart Üniversitesi Havacılık Kulübü, üniversiteyi her türlü askeri, sivil, sportif ve uzay havacılığı alanlarında en etkin bir şekilde temsil eden bir topluluk olmayı vizyon edinir. Havacılık sektöründeki gelişmeleri takip eden, yenilikçi ve öncü bir kulüp olarak tanınmayı hedefler. Üyelerine zengin bir havacılık deneyimi sunarak, sektörde hakim havacılık kültürüne edinmiş ve bu alanda üreten bireyler yetiştirmeyi amaçlar. Havacılığa ilgi duyan her disiplinden kişinin bu alanda bir şeyler üretebileceğine inanır ve bu doğrultuda üyeleri arasında disiplinlerarası işbirliği ve üretkenliği teşvik eder.')
 
@@ -243,27 +256,46 @@ export default function ContentSection() {
                 key={idx}
                 {...fadeUp}
                 transition={{ delay: idx * 0.1, duration: 0.6 }}
-                className="bg-white rounded-2xl border border-slate-200 overflow-hidden group hover:shadow-xl transition-all"
+                className={`bg-white rounded-2xl border-2 overflow-hidden group transition-all relative ${etkinlik.isPending ? 'border-dashed border-slate-300 bg-slate-50/50 opacity-90' : 'border-slate-200 hover:shadow-xl'}`}
               >
-                <div className="h-2 bg-gradient-to-r from-blue-600 to-blue-400"></div>
+                <div className={`h-2 ${etkinlik.isPending ? 'bg-slate-300' : 'bg-gradient-to-r from-blue-600 to-blue-400'}`}></div>
+                
+                {etkinlik.isPending && (
+                  <div className="absolute top-5 right-5 bg-amber-50 text-amber-600 text-[9px] font-space font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border border-amber-200 flex items-center gap-1.5 shadow-sm">
+                    <Clock className="w-3 h-3" />
+                    Henüz Netleşmedi
+                  </div>
+                )}
+
                 <div className="p-6">
-                  <span className="inline-block text-[10px] font-space font-bold uppercase tracking-[0.3em] text-blue-600 border border-blue-600/30 bg-blue-50 px-2 py-1 rounded mb-4">{etkinlik.tag}</span>
+                  <span className={`inline-block text-[10px] font-space font-bold uppercase tracking-[0.3em] px-2 py-1 rounded mb-4 border ${etkinlik.isPending ? 'text-slate-500 border-slate-300 bg-slate-100' : 'text-blue-600 border-blue-600/30 bg-blue-50'}`}>{etkinlik.tag}</span>
                   <h3 className="text-lg font-space font-bold text-slate-900 mb-2">{etkinlik.title}</h3>
                   <p className="text-slate-500 text-sm mb-4 leading-relaxed">{etkinlik.desc}</p>
                   
                   <div className="flex items-center justify-between mt-auto">
-                    <div className="flex items-center gap-2 text-blue-600 text-xs font-space font-bold tracking-wider">
+                    <div className={`flex items-center gap-2 text-xs font-space font-bold tracking-wider ${etkinlik.isPending ? 'text-amber-600' : 'text-blue-600'}`}>
                       <Clock className="w-3.5 h-3.5" />
                       {etkinlik.date}
                     </div>
                     
-                    <a 
-                      href={etkinlik.link || "#egitimler"}
-                      className="text-[10px] font-space font-bold uppercase tracking-widest text-blue-600 hover:text-blue-800 flex items-center gap-1 group/btn"
-                    >
-                      Detayları Gör
-                      <ExternalLink className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
-                    </a>
+                    <div className="flex flex-col items-end gap-3">
+                      <a 
+                        href={etkinlik.link || "#egitimler"}
+                        className="text-[10px] font-space font-bold uppercase tracking-widest text-blue-600 hover:text-blue-800 flex items-center gap-1 group/btn"
+                      >
+                        Detayları Gör
+                        <ExternalLink className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
+                      </a>
+                      {etkinlik.hasParticipants && (
+                        <button 
+                          onClick={() => setShowKatilimcilar(true)}
+                          className="text-[10px] font-space font-bold uppercase tracking-widest text-orange-600 hover:text-orange-800 flex items-center gap-1 group/btn"
+                        >
+                          <FileText className="w-3 h-3 group-hover/btn:scale-110 transition-transform" />
+                          Katılımcı Listesi
+                        </button>
+                      )}
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -451,6 +483,61 @@ export default function ContentSection() {
           </motion.div>
         </div>
       </section>
+
+      {/* ========== KATILIMCI MODAL ========== */}
+      {showKatilimcilar && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={() => setShowKatilimcilar(false)}>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-3xl w-full max-h-[85vh] overflow-y-auto relative"
+            onClick={e => e.stopPropagation()}
+          >
+            <button onClick={() => setShowKatilimcilar(false)} className="absolute top-4 right-4 p-2 bg-slate-100 rounded-full hover:bg-slate-200 text-slate-600 transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+            <h3 className="text-2xl font-space font-black text-slate-900 uppercase tracking-tight mb-2">Hava Radar Mevzi Gezisi</h3>
+            <p className="text-slate-500 text-sm mb-6">Kanun gereği KVKK sebebiyle T.C. Kimlik numaraları gizlenmiştir.</p>
+            
+            <div className="grid md:grid-cols-2 gap-8">
+              <div>
+                <h4 className="text-sm font-space font-bold text-blue-600 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2 flex items-center justify-between">
+                  <span>Asil Liste</span>
+                  <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full">{radarKatilimcilar.length} Kişi</span>
+                </h4>
+                <ul className="space-y-2.5 text-xs text-slate-700 font-medium h-[40vh] md:h-auto overflow-y-auto pr-2 custom-scrollbar">
+                  {radarKatilimcilar.map((kisi, i) => (
+                    <li key={i} className="flex items-center gap-3 p-2 hover:bg-slate-50 rounded-lg transition-colors border border-transparent hover:border-slate-100">
+                      <div className="w-2 h-2 rounded-full bg-blue-500 shadow-[0_0_8px_rgba(59,130,246,0.6)] shrink-0" />
+                      {kisi}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+              <div className="mt-6 md:mt-0">
+                <h4 className="text-sm font-space font-bold text-orange-600 uppercase tracking-widest mb-4 border-b border-slate-200 pb-2 flex items-center justify-between">
+                  <span>Ek - Asil Liste</span>
+                  <span className="text-xs bg-orange-100 text-orange-700 px-2 py-0.5 rounded-full">{radarEkKatilimcilar.length} Kişi</span>
+                </h4>
+                <ul className="space-y-2.5 text-xs text-slate-700 font-medium h-[40vh] md:h-auto overflow-y-auto pr-2 custom-scrollbar">
+                  {radarEkKatilimcilar.map((kisi, i) => (
+                    <li key={i} className="flex items-center gap-3 p-2 hover:bg-orange-50/50 rounded-lg transition-colors border border-transparent hover:border-orange-100/50">
+                      <div className="w-2 h-2 rounded-full bg-orange-500 shadow-[0_0_8px_rgba(249,115,22,0.6)] shrink-0" />
+                      {kisi}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+            
+            <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+              <button onClick={() => setShowKatilimcilar(false)} className="bg-slate-900 text-white px-8 py-3 rounded-xl font-space font-bold text-xs uppercase tracking-widest hover:bg-blue-600 transition-colors cursor-pointer">
+                Kapat
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
     </div>
   )
