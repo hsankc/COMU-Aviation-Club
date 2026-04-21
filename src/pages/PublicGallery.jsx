@@ -6,6 +6,9 @@ import { motion } from 'framer-motion'
 import { ArrowLeft } from 'lucide-react'
 
 const fallbackGaleri = [
+  { "title": "Drone Eğitimi", "image": "/gallery/drone-egitimi-1.jpeg" },
+  { "title": "Drone Eğitimi", "image": "/gallery/drone-egitimi-2.jpeg" },
+  { "title": "Drone Eğitimi", "image": "/gallery/drone-egitimi-3.jpeg" },
   { "title": "Etkinlik", "image": "/gallery/1.jpg" },
   { "title": "Etkinlik", "image": "/gallery/2.jpg" },
   { "title": "Etkinlik", "image": "/gallery/3.jpg" },

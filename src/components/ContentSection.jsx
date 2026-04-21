@@ -2,7 +2,8 @@ import { useState, useEffect } from 'react'
 import { motion } from 'framer-motion'
 import { 
   Target, Eye, Users, Award, Calendar, BookOpen, MapPin, 
-  ExternalLink, Clock, Monitor, Globe, Plane, Rocket, Hammer, X, FileText 
+  ExternalLink, Clock, Monitor, Globe, Plane, Rocket, Hammer, X, FileText,
+  CheckCircle, XCircle, ChevronRight 
 } from 'lucide-react'
 import { supabase } from '../lib/supabaseClient'
 
@@ -25,12 +26,38 @@ const yonetim = [
 ]
 
 const yaklasanEtkinlikler = [
-  { title: 'FİLM GECESİ: SULLY', date: '17 Nisan 2026 - 20:00', desc: 'Ziraat Fakültesi Amfisinde "Sully" filmini izleyerek havacılık dolu bir gece geçireceğiz.', tag: 'Etkinlik', link: '#etkinlikler' },
-  { title: 'İHA0/1 TEORİK EĞİTİM', date: '18 Nisan 2026', desc: 'İnsansız Hava Aracı pilotluğu için gerekli teorik bilgilerin verileceği kapsamlı eğitim.', tag: 'Eğitim', link: '#egitimler' },
-  { title: 'İHA0/1 PRATİK UÇUŞ EĞİTİMİ', date: '19 Nisan 2026', desc: 'Teorik eğitimi tamamlayan adaylar için sahada gerçek uçuş deneyimi ve uygulama.', tag: 'Eğitim', link: '#egitimler' },
+  { title: 'FİLM GECESİ: SULLY', date: '24 Nisan 2026 - 19:00', desc: 'Ziraat Fakültesi Amfisinde "Sully" filmini izleyerek havacılık dolu bir gece geçireceğiz.', tag: 'Etkinlik', link: '#etkinlikler' },
+  { title: 'İHA0/1 TEORİK EĞİTİM', date: '18 Nisan 2026', desc: 'İnsansız Hava Aracı pilotluğu için gerekli teorik bilgilerin verileceği kapsamlı eğitim.', tag: 'Eğitim', link: '#egitimler', isCompleted: true },
+  { title: 'İHA0/1 PRATİK UÇUŞ EĞİTİMİ', date: '19 Nisan 2026', desc: 'Teorik eğitimi tamamlayan adaylar için sahada gerçek uçuş deneyimi ve uygulama.', tag: 'Eğitim', link: '#egitimler', isCompleted: true },
   { title: '23 NİSAN STANDI', date: '23 Nisan 2026', desc: 'Çanakkale Hamidiye Tabyalarında stant açarak havacılık faaliyetlerimizi tanıtacağız.', tag: 'Stant', link: '#etkinlikler' },
-  { title: 'TÜRK YILDIZLARI SÖYLEŞİSİ', date: 'Nisan Sonu (Planlanıyor)', desc: 'Türk Yıldızları ekibiyle İçdaş Kongre Merkezi\'nde düzenlemeyi planladığımız söyleşi ve imza günü.', tag: 'Söyleşi', link: '#etkinlikler', isPending: true },
+  { title: 'TÜRK YILDIZLARI SÖYLEŞİSİ', date: 'İptal Edildi', desc: 'Türk Yıldızları ekibiyle İçdaş Kongre Merkezi\'nde düzenlenmesi planlanan söyleşi ve imza günü iptal edilmiştir.', tag: 'Söyleşi', link: '#etkinlikler', isCancelled: true },
   { title: 'HAVA RADAR MEVZİ GEZİSİ', date: '30 Nisan 2026', desc: 'Çanakkale Hava Radar Mevzi Komutanlığı\'na düzenleyeceğimiz teknik ve bilgilendirici gezi. Katılımcı kontenjanı dolmuştur.', tag: 'Gezi', link: '#etkinlikler', hasParticipants: true },
+]
+
+const mayisEtkinlikleri = [
+  { title: 'MODEL UÇAK EĞİTİM ATÖLYESİ', date: '1-2 Mayıs 2026', desc: 'Çanakkale GSB Gençlik Merkezi\'nde düzenlenecek model uçak yapım atölyesi. 7 katılımcı Film Gecesi etkinliğinde, 5 katılımcı ise Instagram çekilişi ile belirlenecektir.', tag: 'Atölye', link: '#etkinlikler' },
+  { 
+    title: 'ÇOMÜ BAHAR ŞENLİKLERİ', 
+    date: '13-14-15 Mayıs 2026', 
+    desc: 'ÇOMÜ Bahar Şenlikleri kapsamında standımızda çeşitli havacılık temalı etkinlikler düzenlenecektir.', 
+    tag: 'Şenlik', 
+    link: '#etkinlikler',
+    hasDetails: true,
+    detailsList: [
+      "Uçurtma Şenliği",
+      "Pilot Çerçeve Fotoğraf Alanı",
+      "Uçak Hedefi Vurma (Sapan)",
+      "Kör Uçuş - Kule Yönlendirme Simülasyonu",
+      "Pilot Olabilir Misin? - Tulum Giyme Deneyimi",
+      "Su Şişesi Roket Fırlatma",
+      "Anı Panosu (Uçurtma süsleme ve havacılık tasarımları)",
+      "Drone Uçuş Gösterisi",
+      "Ödüllü Yarışmalar"
+    ]
+  },
+  { title: 'ANKARA TUSAŞ GEZİSİ', date: '17 Mayıs 2026', desc: 'Türk Havacılık ve Uzay Sanayii (TUSAŞ) tesislerine düzenlenecek teknik gezi. Film Gecesi\'nde 10 kişi, Instagram çekilişinde 15 kişi olmak üzere toplam 25 katılımcı seçilecektir.', tag: 'Gezi', link: '#etkinlikler' },
+  { title: 'PARAŞÜT ŞENLİĞİ', date: '19 Mayıs 2026', desc: '19 Mayıs Atatürk\'ü Anma, Gençlik ve Spor Bayramı\'na özel Uçmakdere\'de düzenlenecek paraşüt deneyimi etkinliği. Etkinlik ücretli olarak gerçekleştirilecektir.', tag: 'Etkinlik', link: '#etkinlikler', isPending: true },
+  { title: 'BANDIRMA 6. ANA JET ÜSSÜ GEZİSİ', date: '22 Mayıs 2026', desc: 'Bandırma 6. Ana Jet Üs Komutanlığı\'na düzenlenecek havacılık gezisi. Önceden belirlenen katılımcılarla gerçekleştirilecektir.', tag: 'Gezi', link: '#etkinlikler', isPending: true },
 ]
 
 const radarKatilimcilar = [
@@ -50,6 +77,9 @@ const egitimler = [
 ]
 
 const galeriItems = [
+  { "title": "Drone Eğitimi", "image": "/gallery/drone-egitimi-1.jpeg" },
+  { "title": "Drone Eğitimi", "image": "/gallery/drone-egitimi-2.jpeg" },
+  { "title": "Drone Eğitimi", "image": "/gallery/drone-egitimi-3.jpeg" },
   { "title": "Etkinlik", "image": "/gallery/1.jpg" },
   { "title": "Etkinlik", "image": "/gallery/2.jpg" },
   { "title": "Etkinlik", "image": "/gallery/3.jpg" },
@@ -114,6 +144,7 @@ export default function ContentSection() {
   const [gallery, setGallery] = useState(galeriItems)
   const [expandedEgitim, setExpandedEgitim] = useState(null)
   const [showKatilimcilar, setShowKatilimcilar] = useState(false)
+  const [selectedEventDetails, setSelectedEventDetails] = useState(null)
   const [misyon, setMisyon] = useState('Askeri, sivil, sportif ve uzay havacılığı alanlarında farkındalık oluşturmak amacıyla söyleşiler, atölye çalışmaları, kariyer günleri ve staj buluşmaları düzenliyoruz. Üyelerimize sektördeki güncel gelişmeleri aktarıyor, staj ve iş fırsatlarını duyurarak sektöre nitelikli bireyler kazandırmayı hedefliyoruz. Uzmanlarla işbirliği yaparak fuarlar, yarışmalar ve sosyal sorumluluk projeleri gerçekleştiriyoruz. Tüm bu faaliyetlerle ÇOMÜ\'yü havacılık alanında en iyi şekilde temsil etmeyi amaçlıyoruz.')
   const [vizyon, setVizyon] = useState('Çanakkale Onsekiz Mart Üniversitesi Havacılık Kulübü, üniversiteyi her türlü askeri, sivil, sportif ve uzay havacılığı alanlarında en etkin bir şekilde temsil eden bir topluluk olmayı vizyon edinir. Havacılık sektöründeki gelişmeleri takip eden, yenilikçi ve öncü bir kulüp olarak tanınmayı hedefler. Üyelerine zengin bir havacılık deneyimi sunarak, sektörde hakim havacılık kültürüne edinmiş ve bu alanda üreten bireyler yetiştirmeyi amaçlar. Havacılığa ilgi duyan her disiplinden kişinin bu alanda bir şeyler üretebileceğine inanır ve bu doğrultuda üyeleri arasında disiplinlerarası işbirliği ve üretkenliği teşvik eder.')
 
@@ -256,9 +287,19 @@ export default function ContentSection() {
                 key={idx}
                 {...fadeUp}
                 transition={{ delay: idx * 0.1, duration: 0.6 }}
-                className={`bg-white rounded-2xl border-2 overflow-hidden group transition-all relative ${etkinlik.isPending ? 'border-dashed border-slate-300 bg-slate-50/50 opacity-90' : 'border-slate-200 hover:shadow-xl'}`}
+                className={`bg-white rounded-2xl border-2 overflow-hidden group transition-all relative ${
+                  etkinlik.isCancelled ? 'border-red-200 bg-red-50/30 opacity-60' :
+                  etkinlik.isCompleted ? 'border-emerald-200 bg-emerald-50/30 opacity-80' :
+                  etkinlik.isPending ? 'border-dashed border-slate-300 bg-slate-50/50 opacity-90' :
+                  'border-slate-200 hover:shadow-xl'
+                }`}
               >
-                <div className={`h-2 ${etkinlik.isPending ? 'bg-slate-300' : 'bg-gradient-to-r from-blue-600 to-blue-400'}`}></div>
+                <div className={`h-2 ${
+                  etkinlik.isCancelled ? 'bg-gradient-to-r from-red-400 to-red-300' :
+                  etkinlik.isCompleted ? 'bg-gradient-to-r from-emerald-500 to-emerald-400' :
+                  etkinlik.isPending ? 'bg-slate-300' :
+                  'bg-gradient-to-r from-blue-600 to-blue-400'
+                }`}></div>
                 
                 {etkinlik.isPending && (
                   <div className="absolute top-5 right-5 bg-amber-50 text-amber-600 text-[9px] font-space font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border border-amber-200 flex items-center gap-1.5 shadow-sm">
@@ -267,25 +308,51 @@ export default function ContentSection() {
                   </div>
                 )}
 
+                {etkinlik.isCompleted && (
+                  <div className="absolute top-5 right-5 bg-emerald-50 text-emerald-600 text-[9px] font-space font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border border-emerald-200 flex items-center gap-1.5 shadow-sm">
+                    <CheckCircle className="w-3 h-3" />
+                    Tamamlandı
+                  </div>
+                )}
+
+                {etkinlik.isCancelled && (
+                  <div className="absolute top-5 right-5 bg-red-50 text-red-500 text-[9px] font-space font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border border-red-200 flex items-center gap-1.5 shadow-sm">
+                    <XCircle className="w-3 h-3" />
+                    İptal Edildi
+                  </div>
+                )}
+
                 <div className="p-6">
-                  <span className={`inline-block text-[10px] font-space font-bold uppercase tracking-[0.3em] px-2 py-1 rounded mb-4 border ${etkinlik.isPending ? 'text-slate-500 border-slate-300 bg-slate-100' : 'text-blue-600 border-blue-600/30 bg-blue-50'}`}>{etkinlik.tag}</span>
-                  <h3 className="text-lg font-space font-bold text-slate-900 mb-2">{etkinlik.title}</h3>
+                  <span className={`inline-block text-[10px] font-space font-bold uppercase tracking-[0.3em] px-2 py-1 rounded mb-4 border ${
+                    etkinlik.isCancelled ? 'text-red-400 border-red-200 bg-red-50' :
+                    etkinlik.isCompleted ? 'text-emerald-600 border-emerald-300 bg-emerald-50' :
+                    etkinlik.isPending ? 'text-slate-500 border-slate-300 bg-slate-100' :
+                    'text-blue-600 border-blue-600/30 bg-blue-50'
+                  }`}>{etkinlik.tag}</span>
+                  <h3 className={`text-lg font-space font-bold mb-2 ${etkinlik.isCancelled ? 'text-slate-400 line-through' : 'text-slate-900'}`}>{etkinlik.title}</h3>
                   <p className="text-slate-500 text-sm mb-4 leading-relaxed">{etkinlik.desc}</p>
                   
                   <div className="flex items-center justify-between mt-auto">
-                    <div className={`flex items-center gap-2 text-xs font-space font-bold tracking-wider ${etkinlik.isPending ? 'text-amber-600' : 'text-blue-600'}`}>
+                    <div className={`flex items-center gap-2 text-xs font-space font-bold tracking-wider ${
+                      etkinlik.isCancelled ? 'text-red-400' :
+                      etkinlik.isCompleted ? 'text-emerald-600' :
+                      etkinlik.isPending ? 'text-amber-600' :
+                      'text-blue-600'
+                    }`}>
                       <Clock className="w-3.5 h-3.5" />
                       {etkinlik.date}
                     </div>
                     
                     <div className="flex flex-col items-end gap-3">
-                      <a 
-                        href={etkinlik.link || "#egitimler"}
-                        className="text-[10px] font-space font-bold uppercase tracking-widest text-blue-600 hover:text-blue-800 flex items-center gap-1 group/btn"
-                      >
-                        Detayları Gör
-                        <ExternalLink className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
-                      </a>
+                      {!etkinlik.isCancelled && (
+                        <a 
+                          href={etkinlik.link || "#egitimler"}
+                          className="text-[10px] font-space font-bold uppercase tracking-widest text-blue-600 hover:text-blue-800 flex items-center gap-1 group/btn"
+                        >
+                          Detayları Gör
+                          <ExternalLink className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
+                        </a>
+                      )}
                       {etkinlik.hasParticipants && (
                         <button 
                           onClick={() => setShowKatilimcilar(true)}
@@ -300,6 +367,71 @@ export default function ContentSection() {
                 </div>
               </motion.div>
             ))}
+          </div>
+
+          {/* --- MAYIS AYI ETKİNLİKLERİ --- */}
+          <div className="mt-20 max-w-5xl mx-auto">
+            <div className="flex flex-col items-center mb-12">
+              <div className="flex items-center gap-3 mb-3">
+                <div className="h-[1px] w-12 bg-gradient-to-r from-transparent to-orange-300"></div>
+                <span className="text-orange-500 text-[10px] font-space font-bold uppercase tracking-[0.4em]">Mayıs 2026</span>
+                <div className="h-[1px] w-12 bg-gradient-to-l from-transparent to-orange-300"></div>
+              </div>
+              <h3 className="text-2xl md:text-3xl font-space font-black text-slate-900 uppercase tracking-tight text-center">Mayıs Ayı Etkinliklerimiz</h3>
+              <div className="w-16 h-[2px] bg-gradient-to-r from-transparent via-orange-500 to-transparent mt-3"></div>
+            </div>
+
+            <div className="grid md:grid-cols-3 gap-8">
+              {mayisEtkinlikleri.map((etkinlik, idx) => (
+                <motion.div 
+                  key={`mayis-${idx}`}
+                  {...fadeUp}
+                  transition={{ delay: idx * 0.1, duration: 0.6 }}
+                  className={`bg-white rounded-2xl border-2 overflow-hidden group transition-all relative ${
+                    etkinlik.isPending ? 'border-dashed border-orange-200 bg-orange-50/30' : 'border-orange-200 hover:shadow-xl hover:shadow-orange-500/10'
+                  }`}
+                >
+                  <div className={`h-2 ${
+                    etkinlik.isPending ? 'bg-gradient-to-r from-orange-300 to-amber-300' : 'bg-gradient-to-r from-orange-500 to-amber-400'
+                  }`}></div>
+                  
+                  {etkinlik.isPending && (
+                    <div className="absolute top-5 right-5 bg-amber-50 text-amber-600 text-[9px] font-space font-bold uppercase tracking-widest px-2.5 py-1 rounded-full border border-amber-200 flex items-center gap-1.5 shadow-sm">
+                      <Clock className="w-3 h-3" />
+                      Planlanıyor
+                    </div>
+                  )}
+
+                  <div className="p-6">
+                    <span className={`inline-block text-[10px] font-space font-bold uppercase tracking-[0.3em] px-2 py-1 rounded mb-4 border ${
+                      etkinlik.isPending ? 'text-amber-600 border-amber-300 bg-amber-50' : 'text-orange-600 border-orange-300 bg-orange-50'
+                    }`}>{etkinlik.tag}</span>
+                    <h3 className="text-lg font-space font-bold text-slate-900 mb-2">{etkinlik.title}</h3>
+                    <p className="text-slate-500 text-sm mb-4 leading-relaxed">{etkinlik.desc}</p>
+                    
+                    <div className="flex items-center justify-between mt-auto">
+                      <div className={`flex items-center gap-2 text-xs font-space font-bold tracking-wider ${etkinlik.isPending ? 'text-amber-600' : 'text-orange-600'}`}>
+                        <Calendar className="w-3.5 h-3.5" />
+                        {etkinlik.date}
+                      </div>
+                      <a 
+                        href={etkinlik.link || "#etkinlikler"}
+                        onClick={(e) => {
+                          if (etkinlik.hasDetails) {
+                            e.preventDefault();
+                            setSelectedEventDetails(etkinlik);
+                          }
+                        }}
+                        className="text-[10px] font-space font-bold uppercase tracking-widest text-orange-600 hover:text-orange-800 flex items-center gap-1 group/btn cursor-pointer"
+                      >
+                        Detayları Gör
+                        <ChevronRight className="w-3 h-3 group-hover/btn:translate-x-0.5 transition-transform" />
+                      </a>
+                    </div>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
           </div>
         </div>
       </section>
@@ -532,6 +664,43 @@ export default function ContentSection() {
             
             <div className="mt-8 pt-6 border-t border-slate-100 text-center">
               <button onClick={() => setShowKatilimcilar(false)} className="bg-slate-900 text-white px-8 py-3 rounded-xl font-space font-bold text-xs uppercase tracking-widest hover:bg-blue-600 transition-colors cursor-pointer">
+                Kapat
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ========== ETKİNLİK DETAY MODAL ========== */}
+      {selectedEventDetails && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm" onClick={() => setSelectedEventDetails(null)}>
+          <motion.div 
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="bg-white rounded-2xl shadow-2xl p-6 md:p-8 max-w-2xl w-full max-h-[85vh] overflow-y-auto relative"
+            onClick={e => e.stopPropagation()}
+          >
+            <button onClick={() => setSelectedEventDetails(null)} className="absolute top-4 right-4 p-2 bg-slate-100 rounded-full hover:bg-slate-200 text-slate-600 transition-colors">
+              <X className="w-5 h-5" />
+            </button>
+            <h3 className="text-2xl font-space font-black text-slate-900 uppercase tracking-tight mb-4">{selectedEventDetails.title}</h3>
+            
+            <p className="text-slate-600 text-sm mb-6 leading-relaxed">
+               {selectedEventDetails.desc}
+            </p>
+
+            <h4 className="text-lg font-space font-black text-slate-900 uppercase mb-4 border-b pb-2">Etkinlikler</h4>
+            <ul className="space-y-3 mb-8">
+              {selectedEventDetails.detailsList?.map((item, i) => (
+                <li key={i} className="flex items-start gap-3 text-sm font-medium text-slate-700">
+                  <div className="w-2 h-2 rounded-full bg-orange-500 mt-1.5 shrink-0 shadow-[0_0_8px_rgba(249,115,22,0.6)]" />
+                  <span>{item}</span>
+                </li>
+              ))}
+            </ul>
+
+            <div className="mt-8 pt-6 border-t border-slate-100 text-center">
+              <button onClick={() => setSelectedEventDetails(null)} className="bg-slate-900 text-white px-8 py-3 rounded-xl font-space font-bold text-xs uppercase tracking-widest hover:bg-orange-600 transition-colors cursor-pointer">
                 Kapat
               </button>
             </div>
